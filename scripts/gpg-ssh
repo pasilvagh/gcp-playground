@@ -1,0 +1,17 @@
+# check
+gpg --list-secret-keys --keyid-format=long
+
+# print public key
+gpg --armor --export [rsa4096-public-key-id]
+
+# set up gpg key with git, unset configuration so the default format of openpgp will be use
+git config --global --unset gpg.format
+
+# set primary GPG signing key in Git
+git config --global user.signingkey [rsa4096-public-key-id]
+
+# Configure Git to use SSH to sign commits and tags
+git config --global gpg.format ssh
+
+# set SSH signing key in Git
+git config --global user.signingkey /PATH/TO/.SSH/KEY.PUB
