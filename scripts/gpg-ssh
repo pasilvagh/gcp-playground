@@ -15,3 +15,29 @@ git config --global gpg.format ssh
 
 # set SSH signing key in Git
 git config --global user.signingkey /PATH/TO/.SSH/KEY.PUB
+
+# Find and take a note of your public key fingerprint
+ssh-add -l -E sha256
+
+# get repo remotes
+git remote -v
+
+# Change your remote's URL from HTTPS to SSH 
+git remote set-url origin git@github.com:USERNAME/REPOSITORY.git
+
+# signing commit locally
+git config commit.gpgsign true
+
+# sign commit
+git commit -S -m [message]
+
+# signing on Git
+https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification
+https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits
+https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-tags
+
+# sign tag
+git tag -s [tag]
+# verify tag
+git tag -v [tag]
+
