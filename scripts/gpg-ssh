@@ -37,7 +37,7 @@ https://docs.github.com/en/authentication/managing-commit-signature-verification
 https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-tags
 
 # sign tag
-git tag -s [tag]
+git commit -s [tag]
 # verify tag
 git tag -v [tag]
 
