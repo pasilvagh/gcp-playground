@@ -31,6 +31,8 @@ git config commit.gpgsign true
 # sign commit
 git commit -S -m [message]
 
+
+
 # signing on Git
 https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification
 https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits
