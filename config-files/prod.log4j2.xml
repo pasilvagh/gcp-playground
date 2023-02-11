@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="ERROR" monitorInterval="10">
+    <Properties>
+        <Property name="baseDir">${sys:catalina.home}/logs</Property>
+        <Property name="appName">ultravision</Property>
+        <Property name="textFormat">%d{dd-MMM-yyyy HH:mm:ss.SSS} [%t] %-5level %logger{36}.%M():%L - %msg%n</Property>
+    </Properties>
+    <Appenders>
+        <SystemPropertyArbiter propertyName="env" propertyValue="prod">
+            <Console name="Console" target="SYSTEM_OUT">
+                <PatternLayout pattern="${textFormat}"/>
+            </Console>
+        </SystemPropertyArbiter>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.ultravision.zoho.api.consume.ZohoServices" level="ERROR" additivity="false">
+            <AppenderRef ref="SYSTEM_OUT"/>
+        </Logger>
+        <Logger name="com.ultravision.zoho.api.consume.SkedServices" level="ERROR" additivity="false">
+            <AppenderRef ref="SYSTEM_OUT"/>
+        </Logger>
+        <Logger name="com.ultravision.zoho.api" level="ERROR" additivity="false">
+            <AppenderRef ref="SYSTEM_OUT"/>
+        </Logger>
+        <Root level="ERROR">
+            <AppenderRef ref="SYSTEM_OUT"/>
+        </Root>     
+    </Loggers>
+</Configuration>

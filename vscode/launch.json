@@ -1,0 +1,46 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Chrome",
+      "request": "launch",
+      "type": "chrome",
+      "url": "http://localhost:8080/ultravision/api",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "type": "java",
+      "name": "Attach Tomcat",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": "8000"
+    },
+    {
+      "name": "Cloud Run: Run/Debug Locally",
+      "type": "cloudcode.cloudrun",
+      "request": "launch",
+      "build": {
+        "docker": {
+          "path": "testing.Dockerfile"
+        }
+      },
+      "image": "docker.io/pasilvagh/ultravision",
+      "service": {
+        "name": "middleware",
+        "containerPort": 8080,
+        "resources": {
+          "limits": {
+            "memory": "256Mi"
+          }
+        }
+      },
+      "target": {
+        "minikube": {}
+      },
+      "watch": true
+    }
+  ]
+}

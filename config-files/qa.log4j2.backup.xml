@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration name="QAConfig" status="ERROR" monitorInterval="10">
+    <Properties>
+        <Property name="baseDir">${sys:catalina.home}/logs</Property>
+        <Property name="appName">ultravision</Property>
+        <Property name="textFormat">%d{dd-MMM-yyyy HH:mm:ss.SSS} [%t] %-5level %logger{36}.%M():%L - %msg%n</Property>
+    </Properties>
+    <Appenders>
+        <SystemPropertyArbiter propertyName="env" propertyValue="dev">
+            <Console name="Console" target="Out">
+                <PatternLayout pattern="${textFormat}" />
+            </Console>
+            <RollingFile name="ErrorFile" fileName="${baseDir}/${appName}_error.log"
+                filePattern="${baseDir}/$${date:yyyy-MM}/${appName}_error-%d{yyyy-MM-dd}.log">
+                <PatternLayout pattern="${textFormat}" />
+                <Policies>
+                    <TimeBasedTriggeringPolicy />
+                    <SizeBasedTriggeringPolicy size="20 MB" />
+                </Policies>
+                <DefaultRolloverStrategy max="20" />
+            </RollingFile>
+            <RollingFile name="DebugFile" fileName="${baseDir}/${appName}_debug.log"
+                filePattern="${baseDir}/$${date:yyyy-MM}/${appName}_debug-%d{yyyy-MM-dd}.log">
+                <PatternLayout pattern="${textFormat}" />
+                <Policies>
+                    <TimeBasedTriggeringPolicy />
+                    <SizeBasedTriggeringPolicy size="20 MB" />
+                </Policies>
+                <DefaultRolloverStrategy max="20" />
+            </RollingFile>
+            <RollingFile name="InfoFile" fileName="${baseDir}/${appName}_info.log"
+                filePattern="${baseDir}/$${date:yyyy-MM}/${appName}_info-%d{yyyy-MM-dd}.log">
+                <PatternLayout pattern="${textFormat}" />
+                <Policies>
+                    <TimeBasedTriggeringPolicy />
+                    <SizeBasedTriggeringPolicy size="20 MB" />
+                </Policies>
+                <DefaultRolloverStrategy max="20" />
+            </RollingFile>
+        </SystemPropertyArbiter>
+        <SystemPropertyArbiter propertyName="env" propertyValue="prod">
+            <List name="Out">
+            </List>
+          </SystemPropertyArbiter>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.ultravision.zoho.api-TRACE" level="trace" additivity="false">
+            <AppenderRef ref="Out" />
+        </Logger>
+        <Logger name="com.ultravision.zoho.api-DEBUG" level="debug" additivity="false">
+            <AppenderRef ref="Out" />
+        </Logger>
+        <Root level="error">
+            <AppenderRef ref="ErrorFile" />
+        </Root>
+        <Root level="debug">
+            <AppenderRef ref="DebugFile" />
+        </Root>
+        <Root level="info">
+            <AppenderRef ref="InfoFile" />
+        </Root>
+    </Loggers>
+</Configuration>

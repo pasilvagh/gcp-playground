@@ -1,0 +1,46 @@
+version: '3.4'
+
+services:
+
+  middleware-staging:
+    image: ${PROJECT_ID}/${GCLOUD_ARTIFACT_REPO_URL}/${SERVICE_ID}:staging
+    container_name: backend-container-staging
+    env_file:
+      - ${PWD}/.prod.env
+    environment:
+      ENV_TYPE: ${ENV_TYPE}
+    build:
+      context: .
+      dockerfile: ${PWD}/${DOCKERFILE_BUILD_FILE_PATH}
+      target: staging
+    depends_on:
+      - middleware-env
+
+  middleware-prod:
+    image: ${PROJECT_ID}/${GCLOUD_ARTIFACT_REPO_URL}/${SERVICE_ID}:prod
+    container_name: backend-container-prod
+    env_file:
+      - ${PWD}/.prod.env
+    build:
+      context: .
+      dockerfile: ${PWD}/${DOCKERFILE_PROD_FILE_PATH}
+      target: prod
+    environment:
+      - ENV_TYPE=${ENV_TYPE}
+    ports:
+      - ${WA_PORT}:${WA_PORT}
+      - ${DEBUG_PORT}:${DEBUG_PORT}
+    networks:
+      - backend
+    restart: always
+    depends_on:
+      - middleware-staging
+    volumes:
+      - tomcat-prod:${TOMCAT_LOG_PATH}
+    entrypoint: "/usr/local/tomcat/bin/catalina.sh run"
+
+volumes:
+  tomcat-prod:
+
+networks:
+  backend:

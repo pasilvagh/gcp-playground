@@ -1,0 +1,50 @@
+gcloud auth activate-service-account devops@redblu-wordpress-dev.iam.gserviceaccount.com --key-file="..\redblu-wordpress-dev-b545a609b0eb.json"
+
+
+
+gcloud projects add-iam-policy-binding redblu-wordpress-dev --member="serviceAccount:devops@redblu-wordpress-dev.iam.gserviceaccount.com" --role="roles/run.admin"
+
+gcloud projects add-iam-policy-binding redblu-wordpress-dev --member="serviceAccount:devops@redblu-wordpress-dev.iam.gserviceaccount.com" --role="roles/iam.serviceAccountUser"
+
+
+con cloud@tic
+
+gcloud iam service-accounts create SERVICE_ACCOUNT_NAME \
+    --description="DESCRIPTION" \
+    --display-name="DISPLAY_NAME"
+
+gcloud projects add-iam-policy-binding PROJECT_ID \
+    --member="serviceAccount:SERVICE_ACCOUNT_NAME@PROJECT_ID.iam.gserviceaccount.com" \
+    --role="roles/run.admin"
+
+gcloud projects add-iam-policy-binding PROJECT_ID \
+    --member="serviceAccount:SERVICE_ACCOUNT_NAME@PROJECT_ID.iam.gserviceaccount.com" \
+    --role="roles/iam.serviceAccountUser"
+
+-----
+
+For a production environment, it’s best to narrow down the scope to follow the principle of least privilege. Here are the permissions you need:
+
+custom-role-id
+run.jobs.create
+run.jobs.update
+run.jobs.delete
+run.jobs.run
+iam.serviceAccounts.actAs
+
+
+gcloud projects add-iam-policy-binding PROJECT_ID \
+    --member="serviceAccount:SERVICE_ACCOUNT_NAME@PROJECT_ID.iam.gserviceaccount.com" \
+    --role="roles/your-custom-role-id"
+
+gcloud iam service-accounts keys create my_key.json \
+    --iam-account=SERVICE_ACCOUNT_NAME@PROJECT_ID.iam.gserviceaccount.com
+
+
+    gcloud projects add-iam-policy-binding redblu-wordpress-dev --member group:gcp-devops@ticblue.com --role=projects/redblu-wordpress-dev/roles/devops
+
+gcloud projects add-iam-policy-binding redblu-wordpress-dev  --member=serviceAccount:870010572580-compute@developer.gserviceaccount.com  --role=projects/redblu-wordpress-dev/roles/devops
+
+gcloud iam roles create devops --project=redblu-wordpress-dev  --title="devops" --roles="roles/run.admin,roles/iam.serviceAccountUser"
+
+gcloud iam service-accounts create devops

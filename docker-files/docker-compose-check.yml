@@ -1,0 +1,98 @@
+version: '3.4'
+
+services:
+  db:
+    image: ${SERVICE_ID}/mariadb-env:latest
+    container_name: redblu-mariadb${MARIADB_VERSION}-container
+    env_file:
+      - ${PWD}/.envs/.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD : ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_HOST: ${MYSQL_HOST}
+    build:
+      context: .
+      dockerfile: ${PWD}/.docker-config/wordpress/db.Dockerfile
+      target: env
+    restart: always
+    ports:
+      - ${DB_PORT}:3306
+    volumes:
+      - ${PWD}/.docker-config/db/${MYSQL_BACKUP_FILENAME}:/docker-entrypoint-initdb.d/${MYSQL_BACKUP_FILENAME}
+      - db_data:${MYSQL_DATA_PATH}
+    networks:
+      - docker-service
+    command: [
+        '--default_authentication_plugin=mysql_native_password',
+        '--character-set-server=utf8mb4',
+        '--collation-server=utf8mb4_unicode_ci'
+    ]
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-upublic", "-ppublic"]
+      interval: 120s
+      timeout: 1s
+      retries: 3
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.DaemonName}}(image={{.ImageName}};name={{.Name}};id={{.ID}})"
+
+
+  env:
+    image: ${SERVICE_ID}/wordpress-env:latest
+    depends_on:
+      - db
+    env_file:
+      - ${PWD}/.envs/.env
+    environment:
+      WORDPRESS_USER: ${WORDPRESS_USER}
+      WORDPRESS_PASSWORD: ${WORDPRESS_PASSWORD}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_ADMIN_USER: ${WORDPRESS_ADMIN_USER}
+      WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
+    build:
+      context: .
+      dockerfile: ${PWD}/.docker-config/wordpress/env.Dockerfile
+      target: env
+
+  wp:
+    image: ${SERVICE_ID}/redblu-wordpress:latest
+    container_name: redblu-wordpress${WORDPRESS_VERSION}-container
+    env_file:
+      - ${PWD}/.envs/.env
+    environment:
+      WORDPRESS_USER: ${WORDPRESS_USER}
+      WORDPRESS_PASSWORD: ${WORDPRESS_PASSWORD}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_ADMIN_USER: ${WORDPRESS_ADMIN_USER}
+      WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
+    build:
+      context: .
+      dockerfile: ${PWD}/.docker-config/wordpress/build.Dockerfile
+      target: dev
+    depends_on:
+      - env
+    links:
+      - db
+    restart: always
+    ports:
+      - ${WP_PORT}:8080
+    volumes:
+      - wp_data:${WORDPRESS_DATA_PATH}
+      - ${PWD}/logs_server:${APACHE_LOG_PATH}
+    networks:
+      - docker-service
+
+volumes:
+  db_data:
+  wp_data:
+
+networks:
+  docker-service:
+    driver: bridge

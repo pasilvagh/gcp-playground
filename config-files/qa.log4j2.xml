@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG" monitorInterval="30">
+    <Properties>
+        <Property name="textFormat">%d{dd-MMM-yyyy HH:mm:ss.SSS} %C{1.} [%t] %-5level %logger{36}.%M():%L - %msg %ex%n</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${textFormat}"/>
+        </Console>
+        <RollingFile name="RollingFileError" fileName="/usr/local/tomcat/logs/ultravision_error.log" filePattern="/usr/local/tomcat/logs/ultravision_error-%d{yyyy-MM-dd}.log">
+            <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${textFormat}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+        <RollingFile name="RollingFileDebug" fileName="/usr/local/tomcat/logs/ultravision_debug.log" filePattern="/usr/local/tomcat/logs/ultravision_debug-%d{yyyy-MM-dd}.log">
+            <LevelRangeFilter minLevel="DEBUG" maxLevel="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${textFormat}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+        <RollingFile name="RollingFileTrace" fileName="/usr/local/tomcat/logs/ultravision_trace.log" filePattern="/usr/local/tomcat/logs/ultravision_trace-%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="${textFormat}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="1"/>
+        </RollingFile>
+        <RollingFile name="RollingFileInfo" fileName="/usr/local/tomcat/logs/ultravision_info.log" filePattern="/usr/local/tomcat/logs/ultravision_info-%d{yyyy-MM-dd}.log">
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${textFormat}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.ultravision.zoho.api.consume" level="TRACE" additivity="false">
+            <AppenderRef ref="RollingFileTrace"/>
+            <AppenderRef ref="RollingFileDebug" />
+            <AppenderRef ref="RollingFileInfo"  />
+            <AppenderRef ref="RollingFileError" />
+            <AppenderRef ref="SYSTEM_OUT"/>
+        </Logger>
+        <Logger name="com.ultravision.zoho.api.services" level="TRACE" additivity="false">
+            <AppenderRef ref="RollingFileTrace"/>
+            <AppenderRef ref="RollingFileDebug" />
+            <AppenderRef ref="RollingFileInfo"  />
+            <AppenderRef ref="RollingFileError" />
+            <AppenderRef ref="SYSTEM_OUT"/>
+        </Logger>
+        <Logger name="com.ultravision.zoho.api.utility" level="TRACE" additivity="false">
+            <AppenderRef ref="RollingFileTrace"/>
+            <AppenderRef ref="RollingFileDebug" />
+            <AppenderRef ref="RollingFileInfo"  />
+            <AppenderRef ref="RollingFileError" />
+            <AppenderRef ref="SYSTEM_OUT"/>
+        </Logger>
+        <Root level="DEBUG">
+            <AppenderRef ref="SYSTEM_OUT"/>
+        </Root>   
+    </Loggers>
+</Configuration>
