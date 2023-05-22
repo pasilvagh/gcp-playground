@@ -20,3 +20,5 @@ script.sh
 **/tomcat-qa-logs/*
 **/tomcat-prod-logs/*
 **/backup/*
+**/infrastructure-architecture/
+**/examples/
