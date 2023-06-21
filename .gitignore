@@ -23,3 +23,8 @@ script.sh
 **/tomcat-prod-logs/*
 **/backup/*
 **/examples/*
+**/terraform/terraform-modules/*
+**/*.yml
+**/*backup.md
+**/*.tfvars
+**/*.tf

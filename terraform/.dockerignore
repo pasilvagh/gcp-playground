@@ -1,0 +1,6 @@
+**/.git/*
+**/.terraform/*
+**/.terraform.d/*
+**/terraform.tfstate.d/*
+**/test/*
+**/examples/*
