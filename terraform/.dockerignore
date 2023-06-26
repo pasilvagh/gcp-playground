@@ -4,3 +4,5 @@
 **/terraform.tfstate.d/*
 **/test/*
 **/examples/*
+**/node_modules
+**/npm-debug.log
