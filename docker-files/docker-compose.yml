@@ -1,9 +1,0 @@
-version: '3.4'
-services:
-  middleware:
-    image: "${DOCKER_REGISTRY_URL}/${SERVICE_IMAGE_NAME}:${ENV_TYPE}"
-    container_name: "backend-container-${ENV_TYPE}"
-    env_file:
-      - ".${ENV_TYPE}.env"
-    environment:
-      ENV_TYPE: ${ENV_TYPE}
